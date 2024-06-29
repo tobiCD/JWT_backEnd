@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "tobi1",
+    "password": "Dang.khoi1",
+    "database": "jwt",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "define" :{
+    "freezeTableName":true
+    }
+  },
+  "test": {
+    "username": "root",
+    "password": "Dang.khoi1",
+    "database": "jwt",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "tobi1",
+    "password": "Dang.khoi1",
+    "database": "jwt",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
