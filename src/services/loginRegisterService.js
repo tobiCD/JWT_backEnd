@@ -1,17 +1,20 @@
 import { where } from 'sequelize'
 import db from '../models/index'
 import bcrypt  from 'bcrypt'
+import {Op} from 'sequelize';
 const salt = bcrypt.genSaltSync(10);
 const hashPassword = (userPassword )=>{ // xử lí hashPassword cho register
     const hash = bcrypt.hashSync(userPassword, salt);
     return hash;
 
 }
-
+const UnHassPassword = (inputPassword,hashPassword)=>{
+    return bcrypt.compareSync(inputPassword,hashPassword)
+}
 
 const isEmail =async (useremail)=>{
     const userEmail = await db.User.findOne({
-        where : { email : useremail }
+        where : { email : useremail } 
     })
     if(userEmail) {
         return true;
@@ -31,7 +34,18 @@ const isPhone =async (userphone)=>{
         return false;
     
 }
-
+const isPassword = async(Password)=>{
+    const unHashPassword = bcrypt.compareSync(Password, hashPassword(Password))
+    const password =  await db.User.findOne({
+        where:{ password : unHashPassword }
+    })
+    
+    if(password ){
+        return true;
+       
+    }
+        return false;
+}
 
 
 const RegisterService = async(rawUserData)=>{ // function nhận dữ liệu request chọc xuống database 
@@ -40,17 +54,17 @@ const RegisterService = async(rawUserData)=>{ // function nhận dữ liệu req
         console.log(CheckEmail)
         if (CheckEmail === true ){
         return {
-            EM : 'The email is exist',
-            EC : '1'
+            EM : 'The Email is exist',
+            EC : 1
         }
-        }
+        }  
         const CheckPhone =await isPhone(rawUserData.phone) // xử lí check phone valid
         console.log(CheckPhone)
 
         if (CheckPhone === true ){
         return {
-            EM : 'The phone is exist',
-            EC : '1'
+            EM : 'The Phone Number is exist',
+            EC : 1
         }
     }
     const PasswordHashed = hashPassword(rawUserData.password)
@@ -63,7 +77,7 @@ const RegisterService = async(rawUserData)=>{ // function nhận dữ liệu req
     })
     return {
         EM : "A user is created successfully !",
-        EC : 0
+        EC :    0
     }
     }
     catch(error) {
@@ -75,6 +89,51 @@ const RegisterService = async(rawUserData)=>{ // function nhận dữ liệu req
     }
 
 }
+const LoginService = async(rawUserData)=>{
+  try {
+   let user = await db.User.findOne({
+    where: {
+        [Op.or]:[
+            { email : rawUserData.LoginValue},
+            {phoneNumber : rawUserData.LoginValue}
+        ]
+    }
+
+   })
+   if(user){
+    let isCorrectPassword = UnHassPassword(rawUserData.password,user.password)
+    if(!isCorrectPassword){
+        return {
+            EM:"Password is incorrect",
+            EC: "1",
+            DT : ""
+        }
+        
+    }
+    return {
+        EM : "Login is  succesfully",
+        EC : 0,
+        DT :""
+    }
+    
+   }
+   else{
+    console.log(">>Not found user with email or Phone number", rawUserData.LoginValue)
+    return {
+        EM:"Email or PhoneNumber is not exist",
+        EC:  1,
+        DT : ""
+    }
+   }
+}catch (error){
+    console.log(error)
+    return {
+        EM : "error from server",
+        EC : 2,
+    }
+}
+}
+    
 
 
-export default RegisterService
+module.exports = {RegisterService , LoginService} 

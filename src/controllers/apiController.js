@@ -1,4 +1,4 @@
-import RegisterService from '../services/loginRegisterService'
+import {RegisterService ,LoginService } from '../services/loginRegisterService'
 const handleRegister =async(req,res) => {
     try {
         if(!req.body.email || !req.body.phone || !req.body.password){
@@ -37,4 +37,33 @@ const handleRegister =async(req,res) => {
             })
     }
 }
-module.exports = { handleRegister}
+const HandleLogin = async(req,res)=>{
+  console.log("check value Login >> " , req.body)
+  
+  try {
+    const data = await LoginService(req.body)
+    if(data.EC === 0 ){
+      return res.status(200).json({
+        EM : data.EM,
+        EC : data.EC
+
+      })
+    }
+    return res.status(400).json({ // Adjust status code as needed
+      EM: data.EM,
+      EC: data.EC,
+      DT: "",
+    });
+  } catch (error) {
+      return res.status(500).json({
+      EM: data.EM,
+      EC : data.EC,
+      DT : ""
+  })
+  }
+}
+
+
+
+
+module.exports = { handleRegister , HandleLogin } 
