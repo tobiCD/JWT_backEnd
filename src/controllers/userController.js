@@ -37,8 +37,24 @@ const updateUser=async(req,res)=>{
 
 }
 const deleteUser=async(req,res)=>{
+    try {
+       let data = await userApiService.deleteUser(req.params.id)
+    //    console.log(req.params.id)
+        return res.status(200).json({
+            EM : data.EM,
+            EC : data.EC,
+            DT : data.DT
+        })
+    } catch (error) {
+        return res.status(500).json({
+            EM : data.EM,
+            EC : data.EC,
+            DT : data.DT
+        })
+    }
 
-}
+        }
+     
 
 module.exports ={
     deleteUser,createUser,ReadUser,updateUser

@@ -9,6 +9,7 @@ const WedAPI = (app)=>{
     routerApi.post('/login' ,HandleLogin )
     routerApi.get('/user/read', userController.ReadUser)
     routerApi.get('/user/read/page=?&limit=?', userController.ReadUser)
+    routerApi.delete('/user/delete/:id', userController.deleteUser)
 
     // routerApi.post('user/create', createUser)
     // routerApi.put('user/update',updateUser)
