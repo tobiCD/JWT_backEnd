@@ -77,7 +77,7 @@ const RegisterService = async(rawUserData)=>{ // function nhận dữ liệu req
     })
     return {
         EM : "A user is created successfully !",
-        EC :    0
+        EC :  0
     }
     }
     catch(error) {
@@ -136,4 +136,4 @@ const LoginService = async(rawUserData)=>{
     
 
 
-module.exports = {RegisterService , LoginService} 
+module.exports = {RegisterService , LoginService ,isEmail,isPhone ,hashPassword} 

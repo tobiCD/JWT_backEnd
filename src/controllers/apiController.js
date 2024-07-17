@@ -1,4 +1,5 @@
-import {RegisterService ,LoginService } from '../services/loginRegisterService'
+import {RegisterService ,LoginService, } from '../services/loginRegisterService'
+import {CreateUser} from '../services/userApiService'
 const handleRegister =async(req,res) => {
     try {
         if(!req.body.email || !req.body.phone || !req.body.password){
@@ -62,8 +63,33 @@ const HandleLogin = async(req,res)=>{
   })
   }
 }
+const HandleCreate =async(req,res)=>{
+  console.log("check value user >> " , req.body)
+  try {
+    const data = await CreateUser(req.body)
+    if(data.EC === 0 ){
+      return res.status(200).json({
+        EM : data.EM,
+        EC : data.EC,
+        DT : data
+
+      })
+    }
+    return res.status(400).json({ // Adjust status code as needed
+      EM: data.EM,
+      EC: data.EC,
+      DT : data
+    });
+  } catch (error) {
+      return res.status(500).json({
+      EM:" error from Server",
+      EC : 2,
+      DT : ""
+  })
+  }
+}
 
 
 
 
-module.exports = { handleRegister , HandleLogin } 
+module.exports = { handleRegister , HandleLogin,HandleCreate } 

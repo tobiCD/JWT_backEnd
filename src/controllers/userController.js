@@ -1,5 +1,5 @@
 const userApiService = require('../services/userApiService')
-
+const groupService = require('../services/groupService')
 const ReadUser=async(req,res)=>{
     try {
         console.log(req.query)
@@ -55,7 +55,23 @@ const deleteUser=async(req,res)=>{
 
         }
      
-
+const ReadGroup =async(req,res)=>{
+    try {
+        let data = await groupService.readFunc()
+        return res.status(200).json({
+            EM : data.EM,
+            EC : data.EC,
+            DT : data.DT
+    })
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            EM : data.EM,
+            EC : data.EC,
+            DT : data.DT
+    })
+    }
+}
 module.exports ={
-    deleteUser,createUser,ReadUser,updateUser
+    deleteUser,createUser,ReadUser,updateUser,ReadGroup
 }

@@ -1,6 +1,7 @@
 import { raw } from 'body-parser'
 import db from '../models/index'
-
+import { where } from 'sequelize'
+import {isEmail ,isPhone , hashPassword} from './loginRegisterService'
 
 const getAllUser =async()=>{
    
@@ -38,11 +39,45 @@ const getAllUser =async()=>{
 }
 const CreateUser = async(data)=>{
     try {
-        await db.User.create({
- 
-        })
-    } catch (error) {
-        
+            const CheckEmail = await isEmail(data.email) // xử lí check email valid
+            console.log(CheckEmail)
+            if (CheckEmail === true ){
+            return {
+                EM : 'The Email is exist',
+                EC : 1,
+                DT : []
+            }
+            }  
+            const CheckPhone =await isPhone(data.phoneNumber) // xử lí check phone valid
+            console.log(CheckPhone)
+    
+            if (CheckPhone === true ){
+            return {
+                EM : 'The Phone Number is exist',
+                EC : 1,
+                DT : []
+            }
+        }
+        let hashUserPassword = hashPassword(data.password)
+        let roleId = parseInt(data.role)
+        let NewUser = await db.User.create({
+            email : data.email , 
+            username : data.username,
+            password  : hashUserPassword,
+            phoneNumber  : data.phoneNumber,
+            groupId : roleId,
+            gender : data.gender    
+     })
+    if(NewUser){
+        return{
+            EM : 'ok',
+            EC : 0,
+            DT : data
+        }
+    }
+}
+     catch (error) {
+        console.log(error)
     }
 }
 const UpdateUser =async(data)=>{
@@ -109,7 +144,7 @@ const getUserWithPanigation = async(page,limit)=>{
             totalPages : totalPages,
             users : rows
         }
-        console.log(">>> check Data : ", data)
+        // console.log(">>> check Data : ", data)
         return{
             EM:'ok',
             EC :0,
