@@ -7,7 +7,7 @@ const getAllUser =async()=>{
    
     try {
         let users = await db.User.findAll({
-             attributes:["id","username","email"],
+             attributes:["id","username","email","gender","phoneNumber"],
              include : {model: db.Group ,  attributes:["name","description"]},
              nest : true
 
@@ -130,8 +130,8 @@ const getUserWithPanigation = async(page,limit)=>{
     try {
         const offset = (page -1)* limit
         const {count , rows} = await db.User.findAndCountAll({
-            attributes:["id","username","email"],
-            include : {model: db.Group ,  attributes:["name","description"]},
+            attributes:["id","username","email","gender","phoneNumber"],
+            include : {model: db.Group ,  attributes:["name","description","id"]},
             offset : offset, 
             limit : parseInt(limit),
             raw  : true,

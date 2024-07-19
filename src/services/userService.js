@@ -2,7 +2,7 @@ import db from '../models/index'
 const getUserList = async()=>{
     let newUser = await db.User.findOne({
         where : {id : 1},
-        attributes:["id","username","email"],
+        attributes:["id","username","email","gender"],
         raw : true,
         include : {model: db.Group ,  attributes:["name","description"]},
         nest : true
