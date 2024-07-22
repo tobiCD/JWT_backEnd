@@ -82,16 +82,37 @@ const CreateUser = async(data)=>{
 }
 const UpdateUser =async(data)=>{
     try {
-        let user = await db.User.findOne({
-            where :{ id : data.id}
-        })
+       
+      let user = await db.User.findOne({
+        where : { id : data.id}
+      })
+      console.log(user)
+        let roleId = parseInt(data.role)
         if(user){
-         await user.update({
-            
-         })
+           await user.update({
+                username  : data.username,
+                groupId : roleId,
+                gender : data.gender   
+            })
+            return {
+                EM:'Update ok',
+                EC :0,
+                DT :[],
+            }
+        }
+        return{
+            EM:'Update fail',
+            EC :1,
+            DT :[],
         }
     } catch (error) {
         console.log(error)
+        return{
+            EM:'error from server',
+            EC :2,
+            DT :[],
+        }
+       
     }
 }
 const deleteUser = async(Userid)=>{

@@ -34,6 +34,22 @@ const createUser=async(req,res)=>{
 
 }
 const updateUser=async(req,res)=>{
+    try {
+        console.log(req.body)
+        const data = await userApiService.UpdateUser(req.body)
+        return res.status(200).json({
+            EM : data.EM,
+            EC : data.EC,
+            DT : data.DT
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            EM : data.EM,
+            EC : data.EC,
+            DT : data.DT
+        })  
+    }
 
 }
 const deleteUser=async(req,res)=>{

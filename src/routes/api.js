@@ -12,7 +12,8 @@ const WedAPI = (app)=>{
 
     routerApi.get('/user/read/page=?&limit=?', userController.ReadUser)
     routerApi.delete('/user/delete/:id', userController.deleteUser)
-    //Group call
+    routerApi.put('/user/edit',userController.updateUser)
+        //Group call
     routerApi.get('/group/read', userController.ReadGroup)
 
     // routerApi.post('user/create', createUser)
