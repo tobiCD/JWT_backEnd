@@ -66,7 +66,8 @@ const CreateUser = async(data)=>{
             password  : hashUserPassword,
             phoneNumber  : data.phoneNumber,
             groupId : roleId,
-            gender : data.gender    
+            gender : data.gender   
+            
      })
     if(NewUser){
         return{

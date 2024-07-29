@@ -2,7 +2,9 @@ const userApiService = require('../services/userApiService')
 const groupService = require('../services/groupService')
 const ReadUser=async(req,res)=>{
     try {
-        console.log(req.query)
+        // console.log(req.query)
+        // console.log(req.cookies)
+        // console.log(req.user)
         if(req.query.page && req.query.limit ){
             let page = req.query.page
             let limit = req.query.limit
@@ -88,6 +90,20 @@ const ReadGroup =async(req,res)=>{
     })
     }
 }
+const getUserAccount = async(req,res)=>{
+    console.log('check user >> ' , req.user)
+    return res.status(200).json({
+        EM:'ok',
+        EC:200,
+        DT:{
+            username : req.user.username,
+            email : req.user.email, 
+
+            access_token : req.token,
+            GroupWithRoles  : req.user.GroupWithRoles
+        }
+    })
+}
 module.exports ={
-    deleteUser,createUser,ReadUser,updateUser,ReadGroup
+    deleteUser,createUser,ReadUser,updateUser,ReadGroup,getUserAccount
 }

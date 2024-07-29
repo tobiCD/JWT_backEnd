@@ -1,7 +1,10 @@
 import {RegisterService ,LoginService, } from '../services/loginRegisterService'
 import {CreateUser} from '../services/userApiService'
+
+// authenticate user 
 const handleRegister =async(req,res) => {
     try {
+
         if(!req.body.email || !req.body.phone || !req.body.password){
             return res.status(200).json({
                 EM : "Missing required parameters",
@@ -17,8 +20,8 @@ const handleRegister =async(req,res) => {
             })
         }
         const data = await RegisterService(req.body);
-        if (data.EC === 0) {
-            return res.status(201).json({
+        if (data.EC === 200) {
+            return res.status(200).json({
               EM: data.EM,
               EC: data.EC,
               // Include relevant data from data (e.g., user ID)
@@ -33,33 +36,38 @@ const handleRegister =async(req,res) => {
     } catch (error) {
             return res.status(500).json({
                 EM: " error from server ",
-                EC : "-1",
+                EC : data.EC,
                 DT : ""
             })
     }
 }
 const HandleLogin = async(req,res)=>{
-  console.log("check value Login >> " , req.body)
+  // console.log("check value Login >> " , req.body)
   
   try {
-    const data = await LoginService(req.body)
-    if(data.EC === 0 ){
+
+    let data = await LoginService(req.body)
+    // input cookies 
+    if(data && data.DT && data.DT.access_token){
+    res.cookie('jwt', data.DT.access_token, { httpOnly: true,maxAge : 60  *60 *1000 });
+    } // corrected method is res.cookie, not res.cookies
+    if(data.EC === 200 ){
       return res.status(200).json({
         EM : data.EM,
-        EC : data.EC
-
+        EC : data.EC,
+        DT : data.DT, 
       })
     }
-    return res.status(400).json({ // Adjust status code as needed
+    return res.status(400).json({ 
       EM: data.EM,
       EC: data.EC,
       DT: "",
     });
   } catch (error) {
-      return res.status(500).json({
-      EM: data.EM,
-      EC : data.EC,
-      DT : ""
+    return res.status(500).json({
+      EM: "Internal Server Error", 
+      EC: 500, 
+      DT: "",
   })
   }
 }
@@ -92,4 +100,4 @@ const HandleCreate =async(req,res)=>{
 
 
 
-module.exports = { handleRegister , HandleLogin,HandleCreate } 
+module.exports = { handleRegister , HandleLogin,HandleCreate, } 
