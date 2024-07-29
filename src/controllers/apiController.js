@@ -96,8 +96,27 @@ const HandleCreate =async(req,res)=>{
   })
   }
 }
+const HandleLogout = async (req, res) => {
+  try {
+    // Xóa cookie jwt
+    res.clearCookie('jwt', { httpOnly: true });
+
+    return res.status(200).json({
+      EM: 'Logout successful!',
+      EC: 200,
+      DT: ""
+    });
+  } catch (error) {
+    console.error(error); // In ra lỗi để kiểm tra
+    return res.status(500).json({
+      EM: "Error from Server",
+      EC: 500,
+      DT: ""
+    });
+  }
+};
 
 
 
 
-module.exports = { handleRegister , HandleLogin,HandleCreate, } 
+module.exports = { handleRegister , HandleLogin,HandleCreate,HandleLogout } 

@@ -1,6 +1,6 @@
 import express from 'express'
 import {HomePage} from '../controllers/homeController'
-import {handleRegister, HandleLogin,HandleCreate} from '../controllers/apiController'
+import {handleRegister, HandleLogin,HandleCreate,HandleLogout} from '../controllers/apiController'
 import {checkUserjwt,checkUserPermission} from '../middleware/JWTAction'
 const userController = require('../controllers/userController')
 const routerApi = express.Router();
@@ -10,6 +10,8 @@ const routerApi = express.Router();
 const WedAPI = (app)=>{
     routerApi.all('*', checkUserjwt,checkUserPermission)
     routerApi.post('/register', handleRegister)
+    routerApi.post('/logout', HandleLogout)
+
     routerApi.post('/login' ,HandleLogin )
     routerApi.get('/user/read',checkUserjwt, userController.ReadUser)
     routerApi.post('/user/create', HandleCreate)
