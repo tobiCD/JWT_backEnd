@@ -114,7 +114,7 @@ const LoginService = async(rawUserData)=>{
         let GroupWithRoles = await getGroupWithRole(user)
         let payload = {
             GroupWithRoles,
-            expiresIn : process.env.JWT_expiresIn,
+           
             email : user.email,
             username : user.username
         }
