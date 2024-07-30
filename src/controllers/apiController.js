@@ -96,26 +96,24 @@ const HandleCreate =async(req,res)=>{
   })
   }
 }
-const HandleLogout = async (req, res) => {
+const HandleLogout = async(req,res)=>{
   try {
-    // Xóa cookie jwt
-    res.clearCookie('jwt', { httpOnly: true });
-
-    return res.status(200).json({
-      EM: 'Logout successful!',
-      EC: 200,
-      DT: ""
-    });
+      res.clearCookies('jwt')
+      return res.status(200).json({
+        EM : 'clear cookies done!',
+        EC : 200,
+        DT : ""
+      })
+    
+   
   } catch (error) {
-    console.error(error); // In ra lỗi để kiểm tra
-    return res.status(500).json({
-      EM: "Error from Server",
-      EC: 500,
-      DT: ""
-    });
+      return res.status(500).json({
+      EM:" error from Server",
+      EC : 500,
+      DT : ""
+  })
   }
-};
-
+}
 
 
 
